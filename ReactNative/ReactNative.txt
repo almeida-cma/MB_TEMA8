@@ -1,0 +1,158 @@
+npm install -g expo-cli
+
+
+npx create-expo-app CrudTarefas
+
+cd CrudTarefas
+
+npx expo install
+
+npx expo install @react-native-async-storage/async-storage
+
+
+
+Em package.json
+---------------
+  "main": "node_modules/expo/AppEntry.js",
+---------------------
+
+
+
+Em App.js
+--------------
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, FlatList, Text, StyleSheet, Alert } from 'react-native';
+
+// Função principal do aplicativo
+export default function App() {
+  const [task, setTask] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  // Função para carregar tarefas do localStorage
+  const loadTasks = () => {
+    const storedTasks = localStorage.getItem('tasks');
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  };
+
+  // Função para adicionar uma nova tarefa
+  const addTask = () => {
+    if (task.trim() === '') {
+      Alert.alert('Atenção', 'Por favor, insira uma tarefa.');
+      return;
+    }
+    const newTasks = [...tasks, { id: Date.now(), title: task }];
+    setTasks(newTasks);
+    setTask('');
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
+  };
+
+  // Função para remover uma tarefa
+  const removeTask = (id) => {
+    const newTasks = tasks.filter((item) => item.id !== id);
+    setTasks(newTasks);
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
+  };
+
+  // Carregar tarefas ao iniciar o aplicativo
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite uma nova tarefa"
+        value={task}
+        onChangeText={setTask}
+      />
+      <Button title="Adicionar Tarefa" onPress={addTask} />
+      <FlatList
+        data={tasks}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.taskContainer}>
+            <Text>{item.title}</Text>
+            <Button title="Remover" onPress={() => removeTask(item.id)} />
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+// Estilos do aplicativo
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  taskContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+});
+----------------------
+
+npx expo start --web
+
+____________________________________-
+npm install -g expo-cli
+
+npx expo init TaskManager
+cd TaskManager
+
+npm install firebase
+
+npm install @react-navigation/native @react-navigation/native-stack
+
+npx expo start
+
+APK_____________________________________
+
+npm install -g eas-cli
+
+eas build:configure
+-------------------
+Log in to EAS with email or username (exit and run eas login --help to see other login options)
+√ Email or username ... almeida.cma
+√ Password ... ***********
+-------------------
+√ Would you like to automatically create an EAS project for @almeida.cma/TaskManager? ... yes
+✔ Created @almeida.cma/TaskManager: https://expo.dev/accounts/almeida.cma/projects/TaskManager on Expo
+✔ Linked local project to EAS project 67f01bb5-84d5-49a6-9eb9-b3973fb439e1
+--------------------
+
+eas build --platform android --profile preview
+
+-----------------------
+📝  Android application id Learn more: https://expo.fyi/android-package
+√ What would you like your Android application id to be? ... com.almeida.cma.TaskManager
+No remote versions are configured for this project, versionCode will be initialized based on the value from the local project.
+✔ Initialized versionCode with 1.
+✔ Using remote Android credentials (Expo server)
+√ Generate a new Android Keystore? ... yes
+✔ Created keystore
+
+Compressing project files and uploading to EAS Build. Learn more: https://expo.fyi/eas-build-archive
+✔ Uploaded to EAS 
+
+Build details: https://expo.dev/accounts/almeida.cma/projects/TaskManager/builds/996f600a-6bcb-44b8-acfc-856c3ab2f7b7
+
+Waiting for build to complete. You can press Ctrl+C to exit.
+✔ Build finished
+-----------------------
