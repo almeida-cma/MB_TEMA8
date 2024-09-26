@@ -120,7 +120,11 @@ npm install firebase
 
 npm install @react-navigation/native @react-navigation/native-stack
 
+npx expo install react-native-web react-dom @expo/metro-runtime
+
 npx expo start
+
+npm start
 
 APK_____________________________________
 
